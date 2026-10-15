@@ -31,7 +31,6 @@ FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
 
--- Check: should return 531108
 SELECT COUNT(*) AS total_rows FROM requests_raw;
 
 -- Peek at the first 10 rows
