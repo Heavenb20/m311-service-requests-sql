@@ -30,7 +30,7 @@ WHERE topic_rank <= 3
   AND department IN ('DEP', 'DOT', 'HHS')
 ORDER BY department, topic_rank;
 
--- Each department vs. the county average
+-- Each department vs. the average department (simple average of department on-time rates)
 WITH dept AS (
   SELECT department,
          COUNT(*) AS closed_requests,

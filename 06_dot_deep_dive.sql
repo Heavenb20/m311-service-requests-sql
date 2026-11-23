@@ -39,3 +39,14 @@ WHERE department = 'DOT'
   AND deadline_days IS NOT NULL
 GROUP BY month_num, month
 ORDER BY month_num;
+
+-- All departments on-time rate by month (to compare with DOT)
+SELECT MONTH(opened_at) AS month_num,
+       MONTHNAME(opened_at) AS month,
+       COUNT(*) AS closed_requests,
+       ROUND(AVG(on_time) * 100, 1) AS pct_on_time
+FROM requests
+WHERE status = 'Closed'
+  AND deadline_days IS NOT NULL
+GROUP BY month_num, month
+ORDER BY month_num;

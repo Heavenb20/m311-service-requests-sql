@@ -4,6 +4,7 @@ USE mc311;
 -- Top 10 requests
 SELECT topic, COUNT(*) AS requests
 FROM requests
+WHERE topic IS NOT NULL
 GROUP BY topic
 ORDER BY requests DESC
 LIMIT 10;

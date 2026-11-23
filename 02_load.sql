@@ -25,7 +25,8 @@ CREATE TABLE requests_raw (
     sr_type             VARCHAR(40)
 );
 
-LOAD DATA LOCAL INFILE 'C:/Users/Brhan/OneDrive/mc311-project/mc311_2025.csv.csv'
+-- Change this path to wherever you saved the CSV
+LOAD DATA LOCAL INFILE 'C:/path/to/mc311_2025.csv'
 INTO TABLE requests_raw
 FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
