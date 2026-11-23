@@ -1,0 +1,9 @@
+department,department_name,closed_requests,late_requests,pct_on_time
+DOT,Transportation,63162,6449,89.8
+OHR,Human Resources,9758,581,94.0
+DPS,Permitting Services,44522,1200,97.3
+POL,Police,18822,381,98.0
+DHCA,Housing & Community Affairs,38566,726,98.1
+MCERP,MCERP,1274,24,98.1
+DEP,Environmental Protection,182077,2173,98.8
+OTHER,All other departments,168835,775,99.5

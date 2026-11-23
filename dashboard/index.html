@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MC311 On-Time Dashboard | Heaven Brhanu</title>
+<meta name="description" content="How often Montgomery County, MD resolved 2025 MC311 service requests by their deadline, by department, month, service area, and council district.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+<header class="top wrap">
+  <p class="crumb"><a href="https://github.com/Heavenb20/m311-service-requests-sql">MC311 SQL project</a> &middot; <a href="https://heavenb20.github.io/portfolio.html">Heaven Brhanu</a></p>
+  <h1>Is Montgomery County keeping its promises?</h1>
+  <p class="sub">Every MC311 request comes with a deadline. This dashboard shows how often departments met it in 2025, built from SQL queries on <span class="num" data-total="requests"></span> service requests.</p>
+</header>
+
+<main class="wrap">
+  <section class="kpis" aria-label="Key numbers">
+    <div class="kpi"><b class="num" data-total="requests"></b><span>service requests in 2025</span></div>
+    <div class="kpi"><b class="num" id="kpi-ontime"></b><span>of closed requests resolved on time</span></div>
+    <div class="kpi"><b class="num" data-total="late"></b><span>requests missed their deadline</span></div>
+    <div class="kpi kpi-alert"><b class="num" id="kpi-dot"></b><span>of late requests came from Transportation (DOT)</span></div>
+  </section>
+
+  <div class="grid">
+    <section class="panel wide-panel" aria-labelledby="t-dept">
+      <h2 id="t-dept">Late requests by department</h2>
+      <p class="note">Click a department in the table below to highlight it.</p>
+      <div class="chart" id="c-dept"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-month">
+      <h2 id="t-month">On-time rate by month</h2>
+      <p class="note">DOT dips every spring and summer; the county overall stays above 96%.</p>
+      <div class="legend"><span><i class="sw sw-dot"></i>DOT</span><span><i class="sw sw-all"></i>All departments</span></div>
+      <div class="chart" id="c-month"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-vol">
+      <h2 id="t-vol">Requests by month</h2>
+      <p class="note">Volume peaks in June and July.</p>
+      <div class="chart" id="c-vol"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-area">
+      <h2 id="t-area">DOT on-time rate by service area</h2>
+      <p class="note">Tree Maintenance is DOT's biggest gap.</p>
+      <div class="chart" id="c-area"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-dist">
+      <h2 id="t-dist">DOT on-time rate by council district</h2>
+      <p class="note">Requests with a location only (47% of requests).</p>
+      <div class="chart" id="c-dist"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-src">
+      <h2 id="t-src">How residents contact MC311</h2>
+      <div class="chart" id="c-src"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-top">
+      <h2 id="t-top">Most common requests</h2>
+      <div class="chart" id="c-top"></div>
+    </section>
+
+    <section class="panel wide-panel" aria-labelledby="t-table">
+      <h2 id="t-table">Department scorecard</h2>
+      <p class="note">Closed requests with a deadline. Departments with 1,000+ requests shown separately. Click a column to sort.</p>
+      <div class="table-wrap">
+        <table id="scorecard">
+          <thead><tr>
+            <th scope="col"><button type="button" data-sort="department_name">Department</button></th>
+            <th scope="col" class="n"><button type="button" data-sort="closed_requests">Closed</button></th>
+            <th scope="col" class="n"><button type="button" data-sort="late_requests">Late</button></th>
+            <th scope="col" class="n"><button type="button" data-sort="pct_on_time">On time</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <section class="about" aria-labelledby="t-about">
+    <h2 id="t-about">About this data</h2>
+    <p><b>Source:</b> Montgomery County, MD open data, MC311 Service Requests, requests opened January 1 to December 31, 2025. Cleaned and analyzed in MySQL; every number here comes from a query in the <a href="https://github.com/Heavenb20/m311-service-requests-sql">project repository</a>.</p>
+    <p><b>On time</b> means the request was resolved within the department's own deadline, in business days. 3,901 requests still open at the time of download are left out of on-time rates.</p>
+    <p><b>Location:</b> 53% of requests have no council district. Those requests were 99.0% on time, so district comparisons use only requests with a location.</p>
+  </section>
+</main>
+
+<div class="tip" id="tip" role="status" aria-live="polite" hidden></div>
+<noscript><p class="wrap">This dashboard needs JavaScript to draw its charts. The numbers are also in the project's results folder.</p></noscript>
+<script src="data.js" defer></script>
+<script src="dashboard.js" defer></script>
+</body>
+</html>

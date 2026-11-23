@@ -4,7 +4,12 @@ A SQL analysis of **531,108 MC311 service requests** from 2025: the calls, web f
 
 Every request comes with a promise: a deadline, in business days, for the responsible department to resolve it. I used SQL to find out how often the county keeps that promise, which departments miss it, and when and where they fall behind.
 
-![Late requests by department](charts/01_late_by_department.png)
+## Interactive dashboard
+
+**[Open the live dashboard](https://heavenb20.github.io/mc311-dashboard/)**: hover any bar or point for details, sort the department scorecard, and click a department to highlight it.
+
+[![MC311 on-time dashboard](charts/dashboard.png)](https://heavenb20.github.io/mc311-dashboard/)
+
 
 ## Key findings
 
@@ -55,8 +60,10 @@ Before analyzing anything, I checked what was in the data:
 | `07_by_district.sql` | Tests whether missing locations are different, then compares council districts |
 | `08_advanced.sql` | CTEs and window functions: month-over-month change with `LAG`, top 3 requests per department with `RANK`, and each department vs. the average with `AVG() OVER ()` |
 | `09_dashboard_view.sql` | A view of the clean, closed requests for dashboards |
-| `results/` | Query results used for the charts |
+| `results/` | Query results used for the charts and dashboard (see `results/README.md` for which query made each file) |
 | `make_charts.py` | Builds the charts in `charts/` from those results (Python, pandas, matplotlib) |
+| `build_dashboard.py` | Packs the results into `dashboard/data.js` |
+| `dashboard/` | The interactive dashboard: one HTML page, its CSS, and JavaScript that draws every chart (no libraries) |
 
 **SQL skills used:** `GROUP BY` and `HAVING`, `CASE WHEN`, `NULLIF`, date functions, type conversion, views, CTEs, and window functions (`LAG`, `RANK`, `AVG() OVER ()`).
 
@@ -78,6 +85,6 @@ The raw CSV (about 117 MB) isn't included because it's over GitHub's file size l
 - **Location is missing for 53% of requests,** so district comparisons only cover requests with an address.
 
 **Data:** [Montgomery County, MD open data: MC311 Service Requests](https://data.montgomerycountymd.gov/)
-**Tools:** MySQL 8.0, MySQL Workbench, Python (pandas, matplotlib)
+**Tools:** MySQL 8.0, MySQL Workbench, Python (pandas, matplotlib), HTML, CSS, JavaScript
 
 *Heaven Brhanu, Information Science, University of Maryland*
