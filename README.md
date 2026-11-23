@@ -4,12 +4,27 @@ A SQL analysis of **531,108 MC311 service requests** from 2025: the calls, web f
 
 Every request comes with a promise: a deadline, in business days, for the responsible department to resolve it. I used SQL to find out how often the county keeps that promise, which departments miss it, and when and where they fall behind.
 
-## Interactive dashboard
+## Power BI dashboard
 
-**[Open the live dashboard](https://heavenb20.github.io/mc311-dashboard/)**: hover any bar or point for details, sort the department scorecard, and click a department to highlight it.
+![MC311 Power BI dashboard](charts/powerbi_dashboard.png)
 
-[![MC311 on-time dashboard](charts/dashboard.png)](https://heavenb20.github.io/mc311-dashboard/)
+Built in Power BI Desktop from the `v_dashboard` view (527,016 closed requests with a deadline). Download [`powerbi/mc311_dashboard.pbix`](powerbi/mc311_dashboard.pbix) and open it in Power BI Desktop to use it.
 
+- **KPI cards:** closed requests, late requests, and on-time rate
+- **Slicers:** filter the whole page by department and month
+- **Charts:** late requests by department, on-time rate by month, and DOT late requests by area and by council district (click any bar to cross-filter the page)
+- **DAX measures:**
+  ```
+  Closed Requests   = COUNTROWS(mc311_dashboard)
+  Late Requests     = CALCULATE(COUNTROWS(mc311_dashboard), mc311_dashboard[on_time] = 0)
+  On-Time %         = DIVIDE(SUM(mc311_dashboard[on_time]), COUNTROWS(mc311_dashboard))
+  Late %            = DIVIDE([Late Requests], [Closed Requests])
+  DOT Late Requests = CALCULATE([Late Requests], mc311_dashboard[department] = "DOT")
+  ```
+
+The numbers match the SQL results exactly (12,309 late, 97.66% on time). In the council district chart, "(Blank)" is DOT requests with no district in the data.
+
+**Web version:** there is also an [interactive web version](https://heavenb20.github.io/mc311-dashboard/) that opens in any browser, no Power BI needed.
 
 ## Key findings
 
@@ -60,10 +75,12 @@ Before analyzing anything, I checked what was in the data:
 | `07_by_district.sql` | Tests whether missing locations are different, then compares council districts |
 | `08_advanced.sql` | CTEs and window functions: month-over-month change with `LAG`, top 3 requests per department with `RANK`, and each department vs. the average with `AVG() OVER ()` |
 | `09_dashboard_view.sql` | A view of the clean, closed requests for dashboards |
+| `10_powerbi_export.sql` | Exports the view to a CSV for Power BI with `SELECT ... INTO OUTFILE` |
+| `powerbi/` | The Power BI report (`.pbix`) |
 | `results/` | Query results used for the charts and dashboard (see `results/README.md` for which query made each file) |
 | `make_charts.py` | Builds the charts in `charts/` from those results (Python, pandas, matplotlib) |
 | `build_dashboard.py` | Packs the results into `dashboard/data.js` |
-| `dashboard/` | The interactive dashboard: one HTML page, its CSS, and JavaScript that draws every chart (no libraries) |
+| `dashboard/` | The web version of the dashboard: one HTML page, its CSS, and JavaScript that draws every chart |
 
 **SQL skills used:** `GROUP BY` and `HAVING`, `CASE WHEN`, `NULLIF`, date functions, type conversion, views, CTEs, and window functions (`LAG`, `RANK`, `AVG() OVER ()`).
 
@@ -75,6 +92,7 @@ Before analyzing anything, I checked what was in the data:
    ```
 2. In MySQL 8.0, turn on local file loading (`SET GLOBAL local_infile = 1;`).
 3. Update the file path in `02_load.sql`, then run the scripts in order.
+4. Run `10_powerbi_export.sql`, then in Power BI use Get data → Text/CSV on the exported file (or open the `.pbix`).
 
 The raw CSV (about 117 MB) isn't included because it's over GitHub's file size limit.
 
@@ -85,6 +103,6 @@ The raw CSV (about 117 MB) isn't included because it's over GitHub's file size l
 - **Location is missing for 53% of requests,** so district comparisons only cover requests with an address.
 
 **Data:** [Montgomery County, MD open data: MC311 Service Requests](https://data.montgomerycountymd.gov/)
-**Tools:** MySQL 8.0, MySQL Workbench, Python (pandas, matplotlib), HTML, CSS, JavaScript
+**Tools:** MySQL 8.0, MySQL Workbench, Power BI Desktop (DAX), Python (pandas, matplotlib), HTML, CSS, JavaScript
 
 *Heaven Brhanu, Information Science, University of Maryland*
